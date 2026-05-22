@@ -53,9 +53,16 @@ app.use((error, _req, res, _next) => {
 
 connectDB()
   .then(() => {
-    app.listen(port, () => console.log(`Server running on port ${port}`));
+    const host = process.env.HOST || "0.0.0.0";
+    app.listen(port, host, () => console.log(`Server running on port ${port}`));
   })
   .catch((error) => {
     console.error(error);
     process.exit(1);
   });
+
+// Provide a simple root response in non-production so platform health checks
+// (and the browser) don't receive a 404 while the client isn't served.
+if (process.env.NODE_ENV !== "production") {
+  app.get("/", (_req, res) => res.send({ ok: true, message: "Server running" }));
+}
