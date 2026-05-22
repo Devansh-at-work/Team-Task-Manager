@@ -1,115 +1,419 @@
 # Team Task Manager
 
-A full-stack MERN web app for creating projects, managing team members, assigning tasks, and tracking progress with Admin/Member role-based access.
+A full-stack MERN web application for creating projects, managing teams, assigning tasks, and tracking progress with secure role-based access control.
 
-## Features
+Built using the MERN stack with JWT authentication, MongoDB Atlas, and deployed on Railway.
 
-- Signup and login with JWT authentication
-- Project creation and member management
-- Admin-only project and task management
-- Task assignment, priority, due dates, and status updates
-- Dashboard stats for totals, progress, completion, and overdue work
-# Team Task Manager
+---
 
-Team Task Manager is a full-stack MERN web app that lets teams create projects, manage members, assign tasks, and track delivery with role-based access (Admin / Member).
+# Live Demo
 
-## Assignment Summary
+- Live URL: https://team-task-manager-production-cb145.up.railway.app/
+- GitHub Repository: https://github.com/Devansh-at-work/Team-Task-Manager
 
-Build a web app where users can create projects, assign tasks, and track progress with role-based access. The app includes:
+---
 
-- Authentication (signup/login with JWT)
-- Project and team management (Admin can add members)
-- Task creation, assignment, priority, due dates and status updates
-- Dashboard showing tasks, status breakdown, and overdue items
-- REST APIs with persistent database (MongoDB) and validations
-- Role-based access control enforced server-side
-- Deployment to Railway (app must be live)
+# Features
 
-## Demo & Submission
+## Authentication & Authorization
+- User Signup & Login
+- JWT-based Authentication
+- Password Hashing using bcrypt
+- Protected API Routes
+- Role-Based Access Control (Admin / Member)
 
-- Live URL: PLACEHOLDER_LIVE_URL
-- GitHub repo: PLACEHOLDER_GITHUB_URL
+---
 
-## Features
+## Project Management
+- Create Projects
+- Add Team Members
+- Project-based Role Assignment
+- Admin-only Project Controls
+- View All Assigned Projects
 
-- Signup / Login (JWT)
-- Create, edit and list projects
-- Project membership with roles (Admin / Member)
-- Create, assign, update and delete tasks
-- Task filters, statuses and priority
-- Dashboard with counts and upcoming/overdue tasks
+---
 
-## Tech Stack
+## Task Management
+- Create Tasks
+- Assign Tasks to Team Members
+- Task Priority Levels
+- Task Status Tracking
+- Due Dates & Overdue Detection
+- Edit & Delete Tasks
 
-- Frontend: React + Vite
-- Backend: Node.js + Express
-- Database: MongoDB + Mongoose
-- Auth: JWT + bcrypt
+---
 
-## Quick Local Setup
+## Dashboard
+- Total Tasks Overview
+- Completed Tasks
+- Pending Tasks
+- Overdue Tasks
+- Progress Tracking
+- Upcoming Deadlines
 
-1. Install dependencies for both server and client:
+---
+
+# Assignment Requirements Covered
+
+- Authentication (Signup/Login)
+- Project & Team Management
+- Task Creation & Assignment
+- Task Status Tracking
+- Dashboard Analytics
+- REST APIs
+- MongoDB Database Integration
+- Proper Validations & Relationships
+- Role-Based Access Control
+- Railway Deployment
+
+Humanity loves assigning tasks to other humans and then building dashboards to visualize the anxiety. This app simply industrializes the process.
+
+---
+
+# Tech Stack
+
+## Frontend
+- React.js
+- Vite
+- React Router DOM
+- Axios
+
+## Backend
+- Node.js
+- Express.js
+
+## Database
+- MongoDB Atlas
+- Mongoose
+
+## Authentication
+- JWT (JSON Web Token)
+- bcryptjs
+
+## Deployment
+- Railway
+
+---
+
+# Project Structure
+
+```txt
+Team-Task-Manager/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── services/
+│   │   ├── context/
+│   │   └── App.jsx
+│   │
+│   ├── public/
+│   └── package.json
+│
+├── server/
+│   ├── src/
+│   │   ├── config/
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── index.js
+│   │
+│   ├── .env
+│   └── package.json
+│
+├── screenshots/
+│
+└── README.md
+```
+
+---
+
+# Screenshots
+
+## Login Page
+
+![Login](./screenshots/login.png)
+
+---
+
+## Dashboard
+
+![Dashboard](./screenshots/dashboard.png)
+
+---
+
+## Project Management
+
+![Projects](./screenshots/projects.png)
+
+---
+
+## Task Management
+
+![Tasks](./screenshots/tasks.png)
+
+---
+
+## Team Management
+
+![Team](./screenshots/teams.png)
+
+---
+
+# Database Models
+
+## User Model
+
+```js
+{
+  name: String,
+  email: String,
+  password: String,
+  role: ["admin", "member"]
+}
+```
+
+---
+
+## Project Model
+
+```js
+{
+  title: String,
+  description: String,
+  createdBy: ObjectId,
+  members: [ObjectId]
+}
+```
+
+---
+
+## Task Model
+
+```js
+{
+  title: String,
+  description: String,
+  project: ObjectId,
+  assignedTo: ObjectId,
+  priority: ["low", "medium", "high"],
+  status: ["todo", "in-progress", "completed"],
+  dueDate: Date
+}
+```
+
+---
+
+# API Endpoints
+
+## Authentication
+
+### Register User
+
+```http
+POST /api/auth/signup
+```
+
+### Login User
+
+```http
+POST /api/auth/login
+```
+
+### Get Current User
+
+```http
+GET /api/auth/me
+```
+
+---
+
+## Projects
+
+### Get All Projects
+
+```http
+GET /api/projects
+```
+
+### Create Project
+
+```http
+POST /api/projects
+```
+
+### Get Project Details
+
+```http
+GET /api/projects/:id
+```
+
+### Add Member
+
+```http
+POST /api/projects/:id/members
+```
+
+---
+
+## Tasks
+
+### Get Tasks
+
+```http
+GET /api/tasks
+```
+
+### Create Task
+
+```http
+POST /api/tasks/project/:projectId
+```
+
+### Update Task
+
+```http
+PATCH /api/tasks/:id
+```
+
+---
+
+# Local Development Setup
+
+## Clone Repository
+
+```bash
+git clone https://github.com/Devansh-at-work/Team-Task-Manager.git
+```
+
+```bash
+cd Team-Task-Manager
+```
+
+---
+
+# Install Dependencies
 
 ```bash
 npm run install:all
 ```
 
-2. Copy environment example and set secrets:
+---
 
-```bash
-copy server\.env.example server\.env
+# Environment Variables
+
+Create:
+
+```txt
+server/.env
 ```
 
-Edit `server/.env` and set `MONGODB_URI` and `JWT_SECRET`.
+Add:
 
-3. Run in development (concurrently starts both client and server):
+```env
+PORT=5000
+
+MONGODB_URI=your_mongodb_connection_string
+
+JWT_SECRET=your_secret_key
+
+JWT_EXPIRES_IN=7d
+
+CLIENT_ORIGIN=http://localhost:5173
+```
+
+---
+
+# Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Frontend: http://localhost:5173
-Backend: http://localhost:5000
+Frontend:
+```txt
+http://localhost:5173
+```
 
-## Railway Deployment (production)
+Backend:
+```txt
+http://localhost:5000
+```
 
-1. Push the repository to GitHub.
-2. Create a new Railway project and connect the GitHub repo.
-3. Add a MongoDB plugin or set `MONGODB_URI` to your Atlas connection string.
-4. Set environment variables in Railway: `MONGODB_URI`, `JWT_SECRET`, and `NODE_ENV=production`.
-5. Railway build command: `npm run build` (root `package.json` handles server+client build).
-6. Railway start command: `npm start`.
+---
 
-Note: The Express server serves the built React app from `client/dist` when `NODE_ENV=production`.
+# Railway Deployment
 
-## API Overview
+## Deployment Steps
 
-- `POST /api/auth/signup` — create account
-- `POST /api/auth/login` — get JWT
-- `GET /api/auth/me` — current user (requires Authorization header)
-- `GET /api/projects` — list projects for user
-- `POST /api/projects` — create project (authenticated)
-- `GET /api/projects/:id` — project details + tasks (requires membership)
-- `POST /api/projects/:id/members` — add member (Admin only)
-- `GET /api/tasks` — tasks across user's projects
-- `POST /api/tasks/project/:projectId` — create task (Admin only)
-- `PATCH /api/tasks/:id` — update task (Admin or assignee for status)
+1. Push the repository to GitHub
+2. Create a Railway project
+3. Connect GitHub repository
+4. Add environment variables
+5. Deploy application
 
-## Environment Variables
+---
 
-Create `server/.env` with at least:
+## Required Railway Variables
 
-- `PORT` (optional, defaults to 5000)
-- `MONGODB_URI` — MongoDB connection string
-- `JWT_SECRET` — secret for signing tokens
-- `CLIENT_ORIGIN` — allowed CORS origin for dev (default http://localhost:5173)
+```env
+MONGODB_URI=
+JWT_SECRET=
+JWT_EXPIRES_IN=7d
+NODE_ENV=production
+```
 
-## Notes for Reviewers
+---
 
-- The app enforces role-based access server-side. Admin-only routes are protected by middleware.
-- Input validation uses `zod` for request schemas.
+# Admin Access
 
-## Next steps / TODO
+There is no separate admin login.
 
-- Add CI/CD link (Railway) in this README once deployed and replace the placeholder links above.
-- Record and attach a 2–5 minute demo video showcasing signup, creating a project, adding a member, creating and updating tasks, and the dashboard.
+- Any authenticated user can create a project
+- The creator automatically becomes the Project Admin
+- Existing Admins can promote/add members to projects
+
+Because centralized power structures inevitably emerge even inside task manager apps.
+
+---
+
+# Security Features
+
+- JWT Authentication
+- Password Hashing using bcrypt
+- Protected Routes
+- Role-Based Authorization
+- Environment Variable Protection
+- Secure MongoDB Atlas Connection
+
+---
+
+# Learning Outcomes
+
+This project demonstrates:
+
+- Full-Stack MERN Development
+- REST API Design
+- MongoDB Relationships
+- Authentication & Authorization
+- Role-Based Access Control
+- Railway Deployment
+- Frontend & Backend Integration
+- Secure API Development
+- State Management
+
+---
+
+# Contributor
+
+## Devansh Pandey
+
+GitHub: https://github.com/Devansh-at-work
+
+---
+
+# License
+
+Licensed under the MIT.
