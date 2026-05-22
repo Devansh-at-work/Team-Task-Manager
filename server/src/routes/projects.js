@@ -33,7 +33,12 @@ router.get("/", async (req, res, next) => {
       .populate("members.user", "name email")
       .sort({ updatedAt: -1 });
 
-    res.json({ projects });
+    const projectsWithRole = projects.map((project) => ({
+      ...project.toObject(),
+      role: project.members.find((member) => member.user._id?.toString?.() === req.user.id.toString())?.role || "Member"
+    }));
+
+    res.json({ projects: projectsWithRole });
   } catch (error) {
     next(error);
   }

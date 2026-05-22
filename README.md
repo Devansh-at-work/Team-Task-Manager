@@ -29,9 +29,6 @@ Build a web app where users can create projects, assign tasks, and track progres
 
 - Live URL: PLACEHOLDER_LIVE_URL
 - GitHub repo: PLACEHOLDER_GITHUB_URL
-- Demo video (2–5 minutes): PLACEHOLDER_DEMO_VIDEO_URL
-
-Include the above links in your submission when ready.
 
 ## Features
 

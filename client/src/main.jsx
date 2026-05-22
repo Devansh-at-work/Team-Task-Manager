@@ -297,6 +297,7 @@ function Workspace({ user, theme, onToggleTheme, onLogout }) {
               >
                 <FolderKanban size={16} />
                 <span>{project.name}</span>
+                <span className={`role role-${project.role || "Member"}`}>{project.role || "Member"}</span>
               </button>
             ))}
           </nav>
