@@ -93,14 +93,11 @@ Humanity loves assigning tasks to other humans and then building dashboards to v
 ## Deployment
 - Railway
 
-<<<<<<< HEAD
 ## Containerization
 - Docker
 - Docker Compose
 - Nginx
 
-=======
->>>>>>> bd76190e1082aae4b45214833b5b54e888d28387
 ---
 
 # Project Structure
@@ -108,11 +105,8 @@ Humanity loves assigning tasks to other humans and then building dashboards to v
 ```txt
 Team-Task-Manager/
 │
-<<<<<<< HEAD
 ├── .dockerignore
 ├── docker-compose.yml
-=======
->>>>>>> bd76190e1082aae4b45214833b5b54e888d28387
 ├── client/
 │   ├── src/
 │   │   ├── components/
@@ -122,12 +116,9 @@ Team-Task-Manager/
 │   │   └── App.jsx
 │   │
 │   ├── public/
-<<<<<<< HEAD
 │   ├── .dockerignore
 │   ├── Dockerfile
 │   ├── nginx.conf
-=======
->>>>>>> bd76190e1082aae4b45214833b5b54e888d28387
 │   └── package.json
 │
 ├── server/
@@ -139,13 +130,9 @@ Team-Task-Manager/
 │   │   ├── routes/
 │   │   └── index.js
 │   │
-<<<<<<< HEAD
 │   ├── .dockerignore
 │   ├── .env
 │   ├── Dockerfile
-=======
-│   ├── .env
->>>>>>> bd76190e1082aae4b45214833b5b54e888d28387
 │   └── package.json
 │
 ├── screenshots/
@@ -369,7 +356,6 @@ http://localhost:5000
 
 ---
 
-<<<<<<< HEAD
 # Docker Setup
 
 You can easily run the entire application (frontend, backend, and Nginx reverse proxy) locally using Docker Compose.
@@ -403,8 +389,6 @@ Access the application:
 
 ---
 
-=======
->>>>>>> bd76190e1082aae4b45214833b5b54e888d28387
 # Railway Deployment
 
 ## Deployment Steps
