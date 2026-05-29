@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET:-supersecretkey}
+      - JWT_EXPIRES_IN=7d
+      - CLIENT_ORIGIN=http://localhost
+    # To run MongoDB locally instead of Atlas, uncomment the lines below
+    # depends_on:
+    #   - mongo
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - server
+
+  # Uncomment the lines below to start a local MongoDB instance
+  # mongo:
+  #   image: mongo:latest
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo_data:/data/db
+
+# Uncomment the lines below to persist local MongoDB data
+# volumes:
+#   mongo_data:
