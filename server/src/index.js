@@ -22,6 +22,10 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || true, credentials: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 
+if (process.env.NODE_ENV !== "production") {
+  app.get("/", (_req, res) => res.send({ ok: true, message: "Server running" }));
+}
+
 app.get("/api/health", (_req, res) => {
   res.json({ ok: true });
 });
@@ -51,18 +55,10 @@ app.use((error, _req, res, _next) => {
   });
 });
 
-connectDB()
-  .then(() => {
-    const host = process.env.HOST || "0.0.0.0";
-    app.listen(port, host, () => console.log(`Server running on port ${port}`));
-  })
-  .catch((error) => {
-    console.error(error);
-    process.exit(1);
+const host = process.env.HOST || "0.0.0.0";
+app.listen(port, host, () => {
+  console.log(`Server running on port ${port}`);
+  connectDB().catch((error) => {
+    console.error("MongoDB connection error:", error);
   });
-
-// Provide a simple root response in non-production so platform health checks
-// (and the browser) don't receive a 404 while the client isn't served.
-if (process.env.NODE_ENV !== "production") {
-  app.get("/", (_req, res) => res.send({ ok: true, message: "Server running" }));
-}
+});

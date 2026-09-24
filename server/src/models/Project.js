@@ -36,6 +36,16 @@ const projectSchema = new mongoose.Schema(
       ref: "User",
       required: true
     },
+    budget: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    status: {
+      type: String,
+      enum: ["Active", "Completed"],
+      default: "Active"
+    },
     members: {
       type: [memberSchema],
       validate: {

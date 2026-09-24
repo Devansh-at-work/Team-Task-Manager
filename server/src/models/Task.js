@@ -1,7 +1,83 @@
 import mongoose from "mongoose";
 
+const expenseItemSchema = new mongoose.Schema(
+  {
+    amount: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    note: {
+      type: String,
+      trim: true,
+      maxlength: 300,
+      default: ""
+    },
+    addedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true
+    },
+    date: {
+      type: Date,
+      default: Date.now
+    }
+  }
+);
+
+const subTaskSchema = new mongoose.Schema(
+  {
+    sequenceNo: {
+      type: String,
+      trim: true
+    },
+    name: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    description: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+    quantity: {
+      type: Number,
+      default: 1,
+      min: 0
+    },
+    status: {
+      type: String,
+      enum: [
+        "Order Placed",
+        "Material in Transit",
+        "Order Received",
+        "Order Accepted",
+        "Order Rejected",
+        "Order Returned"
+      ],
+      default: "Order Placed"
+    },
+    action: {
+      type: String,
+      enum: ["Fabrication", "Purchase"],
+      default: "Fabrication"
+    },
+    assignedTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false
+    },
+    dueDate: {
+      type: Date,
+      required: false
+    }
+  }
+);
+
 const taskSchema = new mongoose.Schema(
   {
+    subTasks: [subTaskSchema],
     title: {
       type: String,
       required: true,
@@ -20,11 +96,12 @@ const taskSchema = new mongoose.Schema(
       ref: "Project",
       required: true
     },
-    assignedTo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      default: null
-    },
+    assignedTo: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      }
+    ],
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -43,7 +120,18 @@ const taskSchema = new mongoose.Schema(
     dueDate: {
       type: Date,
       required: true
-    }
+    },
+    estimatedCost: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    actualCost: {
+      type: Number,
+      default: 0,
+      min: 0
+    },
+    expenses: [expenseItemSchema]
   },
   { timestamps: true }
 );

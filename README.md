@@ -1,97 +1,53 @@
 # Team Task Manager
 
-A full-stack MERN web application for creating projects, managing teams, assigning tasks, and tracking progress with secure role-based access control.
-
-Built using the MERN stack with JWT authentication, MongoDB Atlas, and deployed on Railway.
+A premium, full-stack MERN application for managing projects, team memberships, budgets, tasks, and sub-tasks with a gorgeous glassmorphic UI, viewport portals, and role-based permissions.
 
 ---
 
-# Live Demo
+# Live Demo & Repositories
 
-- Live URL: https://team-task-manager-production-cb145.up.railway.app/
-- GitHub Repository: https://github.com/Devansh-at-work/Team-Task-Manager
-
----
-
-# Features
-
-## Authentication & Authorization
-- User Signup & Login
-- JWT-based Authentication
-- Password Hashing using bcrypt
-- Protected API Routes
-- Role-Based Access Control (Admin / Member)
+- **Live URL**: [https://team-task-manager-production-cb145.up.railway.app/](https://team-task-manager-production-cb145.up.railway.app/)
+- **GitHub Repository**: [https://github.com/Devansh-at-work/Team-Task-Manager](https://github.com/Devansh-at-work/Team-Task-Manager)
 
 ---
 
-## Project Management
-- Create Projects
-- Add Team Members
-- Project-based Role Assignment
-- Admin-only Project Controls
-- View All Assigned Projects
+# Key Features
 
----
+### 📊 Project & Expense Tracker
+- **Rupee-based Ledger (₹)**: Track task-level expenditures with date, note, and author logging.
+- **Budget Control**: Admins can set project budgets; active stats show remaining vs. overrun limits.
+- **Budget Overrun Indicators**: Color-coded meters warning users when expenditures approach or exceed budget thresholds.
 
-## Task Management
-- Create Tasks
-- Assign Tasks to Team Members
-- Task Priority Levels
-- Task Status Tracking
-- Due Dates & Overdue Detection
-- Edit & Delete Tasks
+### 🛡️ Role-Based Access & Safety Control
+- **Creators as Admins**: Creators automatically become Project Admins with privileges to manage team roles and project settings.
+- **Member Task Privileges**: Project members can create tasks and assign/reassign members to tasks and sub-tasks.
+- **Safety Deletion**: Projects can **only** be deleted by Admins once they are marked as `"Completed"` to avoid accidental data loss.
 
----
+### 📥 Import Tasks from Excel
+- **Sheet Parser**: Upload `.xlsx`, `.xls`, or `.csv` sheets directly in the browser using client-side parsing (SheetJS).
+- **Auto Field Mapping**:
+  - `Item No.` / `Item Number` → Sequence No.
+  - `Part Number` → Sub-task Name
+  - `Description` → Description
+  - `QTY.` / `Quantity` → Quantity
+- **Interactive Mapping Portal**: Specify a Parent Task Name, and inline-assign statuses, actions (`Fabrication` / `Purchase`), assignees, and due dates for each sub-task row before final creation.
+- **Post-Creation Edits**: Sub-tasks remain fully editable by project members and admins.
 
-## Dashboard
-- Total Tasks Overview
-- Completed Tasks
-- Pending Tasks
-- Overdue Tasks
-- Progress Tracking
-- Upcoming Deadlines
-
----
-
-# Assignment Requirements Covered
-
-- Authentication (Signup/Login)
-- Project & Team Management
-- Task Creation & Assignment
-- Task Status Tracking
-- Dashboard Analytics
-- REST APIs
-- MongoDB Database Integration
-- Proper Validations & Relationships
-- Role-Based Access Control
-- Railway Deployment
-
-Humanity loves assigning tasks to other humans and then building dashboards to visualize the anxiety. This app simply industrializes the process.
+### 🎨 Premium Glassmorphic UI
+- **Translucent Glass Panels**: Cards, metrics, panels, and modals feature a high-fidelity translucent overlay (`--surface` opacity of `0.52` - `0.55` and `14px` backdrop blur).
+- **Cascading Dropdowns**: Dropdown items render as distinct, staggered oval glass pills.
+- **Viewport Portals**: Dropdowns mount to `document.body` via React Portals, preventing table overflow clipping.
+- **Smart Alignment**: Menus automatically detect bottom viewport boundaries and flip upwards when close to the taskbar.
+- **Zero-Lag Ambient Glow**: An ambient cursor aura follows pointer movements with zero lag.
 
 ---
 
 # Tech Stack
 
-## Frontend
-- React.js
-- Vite
-- React Router DOM
-- Axios
-
-## Backend
-- Node.js
-- Express.js
-
-## Database
-- MongoDB Atlas
-- Mongoose
-
-## Authentication
-- JWT (JSON Web Token)
-- bcryptjs
-
-## Deployment
-- Railway
+- **Frontend**: React.js, Vite, SheetJS (`xlsx`), Lucide React icons, Vanilla CSS.
+- **Backend**: Node.js, Express.js, MongoDB Atlas (Mongoose ODM).
+- **Authentication**: JSON Web Tokens (JWT), bcryptjs hashing.
+- **Validation**: Zod schema validation.
 
 ## Containerization
 - Docker
@@ -204,15 +160,39 @@ Team-Task-Manager/
 
 ## Task Model
 
+### Task Model
 ```js
 {
   title: String,
   description: String,
   project: ObjectId,
-  assignedTo: ObjectId,
-  priority: ["low", "medium", "high"],
-  status: ["todo", "in-progress", "completed"],
-  dueDate: Date
+  assignedTo: [ObjectId],
+  createdBy: ObjectId,
+  status: ["Todo", "In Progress", "Done"],
+  priority: ["Low", "Medium", "High"],
+  dueDate: Date,
+  estimatedCost: Number,
+  actualCost: Number,
+  expenses: [
+    {
+      amount: Number,
+      note: String,
+      addedBy: ObjectId,
+      date: Date
+    }
+  ],
+  subTasks: [
+    {
+      sequenceNo: String,
+      name: String,
+      description: String,
+      quantity: Number,
+      status: ["Order Placed", "Material in Transit", "Order Received", "Order Accepted", "Order Rejected", "Order Returned"],
+      action: ["Fabrication", "Purchase"],
+      assignedTo: ObjectId,
+      dueDate: Date
+    }
+  ]
 }
 ```
 
@@ -220,126 +200,53 @@ Team-Task-Manager/
 
 # API Endpoints
 
-## Authentication
+### 🔐 Authentication
+- `POST /api/auth/signup` - Register user
+- `POST /api/auth/login` - Authenticate & obtain JWT
+- `GET /api/auth/me` - Get profile details
 
-### Register User
+### 📁 Projects
+- `GET /api/projects` - List all projects
+- `POST /api/projects` - Create a project
+- `GET /api/projects/:id` - Fetch project dashboard stats and tasks list
+- `PATCH /api/projects/:id/budget` - Update budget (Admin only)
+- `PATCH /api/projects/:id/members/:userId` - Update user project role (Admin only)
+- `POST /api/projects/:id/members` - Invite member to project (Admin only)
+- `DELETE /api/projects/:id` - Delete project (Admin only; blocked unless project status is `"Completed"`)
 
-```http
-POST /api/auth/signup
-```
-
-### Login User
-
-```http
-POST /api/auth/login
-```
-
-### Get Current User
-
-```http
-GET /api/auth/me
-```
-
----
-
-## Projects
-
-### Get All Projects
-
-```http
-GET /api/projects
-```
-
-### Create Project
-
-```http
-POST /api/projects
-```
-
-### Get Project Details
-
-```http
-GET /api/projects/:id
-```
-
-### Add Member
-
-```http
-POST /api/projects/:id/members
-```
-
----
-
-## Tasks
-
-### Get Tasks
-
-```http
-GET /api/tasks
-```
-
-### Create Task
-
-```http
-POST /api/tasks/project/:projectId
-```
-
-### Update Task
-
-```http
-PATCH /api/tasks/:id
-```
+### 📝 Tasks & Expenses
+- `GET /api/tasks` - List user tasks across projects
+- `POST /api/tasks/project/:projectId` - Create task/sub-tasks (all members)
+- `PATCH /api/tasks/:id` - Update task status, costs, assignees, or sub-tasks list
+- `DELETE /api/tasks/:id` - Delete task (Admin only)
+- `POST /api/tasks/:id/expenses` - Log expense item
 
 ---
 
 # Local Development Setup
 
-## Clone Repository
-
+### 1. Clone & Set Up Directory
 ```bash
 git clone https://github.com/Devansh-at-work/Team-Task-Manager.git
-```
-
-```bash
 cd Team-Task-Manager
 ```
 
----
-
-# Install Dependencies
-
+### 2. Install Dependencies
 ```bash
 npm run install:all
 ```
 
----
-
-# Environment Variables
-
-Create:
-
-```txt
-server/.env
-```
-
-Add:
-
+### 3. Configure Environment Variables
+Create a file at `server/.env` and add:
 ```env
 PORT=5000
-
 MONGODB_URI=your_mongodb_connection_string
-
-JWT_SECRET=your_secret_key
-
+JWT_SECRET=your_jwt_secret_token
 JWT_EXPIRES_IN=7d
-
 CLIENT_ORIGIN=http://localhost:5173
 ```
 
----
-
-# Run Development Server
-
+### 4. Run Development Server
 ```bash
 npm run dev
 ```
@@ -461,4 +368,4 @@ GitHub: https://github.com/Devansh-at-work
 
 # License
 
-Licensed under the MIT.
+Distributed under the MIT License.

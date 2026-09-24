@@ -14,6 +14,11 @@ router.get("/", requireAuth, async (req, res, next) => {
       .populate("assignedTo", "name email")
       .sort({ dueDate: 1 });
 
+    const allUserProjects = await Project.find({ "members.user": req.user.id });
+    const totalBudget = allUserProjects.reduce((sum, p) => sum + (p.budget || 0), 0);
+    const totalEstimated = tasks.reduce((sum, task) => sum + (task.estimatedCost || 0), 0);
+    const totalSpent = tasks.reduce((sum, task) => sum + (task.actualCost || 0), 0);
+
     const now = new Date();
     const counts = {
       projects: projects.length,
@@ -21,7 +26,10 @@ router.get("/", requireAuth, async (req, res, next) => {
       todo: tasks.filter((task) => task.status === "Todo").length,
       inProgress: tasks.filter((task) => task.status === "In Progress").length,
       done: tasks.filter((task) => task.status === "Done").length,
-      overdue: tasks.filter((task) => task.status !== "Done" && task.dueDate < now).length
+      overdue: tasks.filter((task) => task.status !== "Done" && task.dueDate < now).length,
+      totalBudget,
+      totalEstimated,
+      totalSpent
     };
 
     res.json({
