@@ -3,14 +3,25 @@ import { createRoot } from "react-dom/client";
 import { createPortal } from "react-dom";
 import {
   AlertCircle,
+  AlertTriangle,
+  ArrowDownRight,
+  ArrowUpRight,
   BarChart3,
+  Calendar,
   CalendarClock,
+  Check,
   CheckCircle2,
+  CheckSquare,
+  ChevronDown,
+  Circle,
+  Clock,
   DollarSign,
   Eye,
   EyeOff,
+  FileSpreadsheet,
   FolderKanban,
   LogOut,
+  Minus,
   Moon,
   Pencil,
   PieChart,
@@ -19,14 +30,12 @@ import {
   Search,
   Settings,
   ShieldCheck,
-  Sparkles,
   Sun,
   Trash2,
+  User,
   Users,
   Wallet,
-  X,
-  ChevronDown,
-  Check
+  X
 } from "lucide-react";
 import { api, getToken, setToken } from "./api/client";
 import * as XLSX from "xlsx";
@@ -292,7 +301,7 @@ function AuthView({ onAuthed, error, setError, theme, onToggleTheme }) {
         <div className="auth-copy">
           <div className="auth-copy-main">
             <div className="auth-badge">
-              <Sparkles size={18} />
+              <ShieldCheck size={16} />
               <span>Team Workspace</span>
             </div>
             <h1>Team Task Manager</h1>
@@ -431,7 +440,8 @@ function Workspace({ user, theme, onToggleTheme, onLogout }) {
               <h1>{selectedProject?.name || "Create a project to begin"}</h1>
               {selectedProject && (
                 <span className={`project-status-tag ${isProjectCompleted ? "completed" : "active"}`}>
-                  {isProjectCompleted ? "Completed" : "Ongoing"}
+                  {isProjectCompleted ? <CheckCircle2 size={13} /> : <Clock size={13} />}
+                  <span>{isProjectCompleted ? "Completed" : "Ongoing"}</span>
                 </span>
               )}
             </div>
@@ -457,7 +467,10 @@ function Workspace({ user, theme, onToggleTheme, onLogout }) {
                 <span>Insights & Settings</span>
               </button>
             )}
-            <span className={`role role-${role || "Member"}`}>{role || "Member"}</span>
+            <span className={`role-badge role-${role || "Member"}`}>
+              {isAdmin ? <ShieldCheck size={14} /> : <User size={14} />}
+              <span>{role || "Member"}</span>
+            </span>
           </div>
         </header>
 
@@ -657,7 +670,8 @@ function ProjectSettingsModal({ project, projectDetail, isAdmin, user, onClose, 
                       <p>Permanently delete this project and all its tasks. This action cannot be undone.</p>
                       {!isCompleted && (
                         <span className="delete-warning-tip">
-                          ⚠️ Project must be marked as <strong>Completed</strong> first before it can be deleted.
+                          <AlertTriangle size={15} className="warning-tip-icon" />
+                          <span>Project must be marked as <strong>Completed</strong> first before it can be deleted.</span>
                         </span>
                       )}
                     </div>
@@ -1194,19 +1208,21 @@ function CreateProject({ onCreated }) {
 function Stats({ dashboard }) {
   const counts = dashboard?.counts || {};
   const items = [
-    ["Projects", counts.projects || 0, <FolderKanban size={20} />],
-    ["Tasks", counts.total || 0, <BarChart3 size={20} />],
-    ["In progress", counts.inProgress || 0, <CalendarClock size={20} />],
-    ["Overdue", counts.overdue || 0, <AlertCircle size={20} />],
-    ["Spent / Budget", `₹${(counts.totalSpent || 0).toLocaleString()} / ₹${(counts.totalBudget || 0).toLocaleString()}`, <Wallet size={20} />]
+    ["Projects", counts.projects || 0, <FolderKanban size={18} />],
+    ["Tasks", counts.total || 0, <CheckSquare size={18} />],
+    ["In progress", counts.inProgress || 0, <Clock size={18} />],
+    ["Overdue", counts.overdue || 0, <AlertCircle size={18} />],
+    ["Spent / Budget", `₹${(counts.totalSpent || 0).toLocaleString()} / ₹${(counts.totalBudget || 0).toLocaleString()}`, <Wallet size={18} />]
   ];
 
   return (
     <section className="stats">
       {items.map(([label, value, icon], index) => (
         <article key={label} className={`stat-card stat-${index + 1}`}>
-          {icon}
-          <span>{label}</span>
+          <div className="stat-card-head">
+            <div className="stat-icon-wrapper">{icon}</div>
+            <span>{label}</span>
+          </div>
           <strong>{value}</strong>
         </article>
       ))}
@@ -1475,8 +1491,9 @@ function ExcelImportButton({ project, onSaved }) {
         ref={fileInputRef}
         onChange={handleFileChange}
       />
-      <button className="ghost" type="button" onClick={() => fileInputRef.current?.click()}>
-        Import Excel
+      <button className="ghost excel-import-btn" type="button" onClick={() => fileInputRef.current?.click()}>
+        <FileSpreadsheet size={16} />
+        <span>Import Excel</span>
       </button>
 
       {open && (
@@ -2088,13 +2105,28 @@ function TaskBoard({ tasks, role, user, project, onChange }) {
     onChange();
   }
 
+  const columnIcons = {
+    "Todo": <Circle size={13} className="col-status-icon todo" />,
+    "In Progress": <Clock size={13} className="col-status-icon progress" />,
+    "Done": <CheckCircle2 size={13} className="col-status-icon done" />
+  };
+
+  const priorityIcons = {
+    High: <ArrowUpRight size={12} />,
+    Medium: <Minus size={12} />,
+    Low: <ArrowDownRight size={12} />
+  };
+
   return (
     <>
       <div className="task-board">
         {statuses.map((status) => (
           <section className="task-column" key={status}>
             <div className="column-head">
-              <h3>{status}</h3>
+              <div className="column-title-group">
+                {columnIcons[status] || <Circle size={13} />}
+                <h3>{status}</h3>
+              </div>
               <span>{grouped[status].length}</span>
             </div>
             {grouped[status].map((task) => {
@@ -2109,8 +2141,14 @@ function TaskBoard({ tasks, role, user, project, onChange }) {
               return (
                 <article className="task-card" key={task._id}>
                   <div className="task-meta">
-                    <span className={`priority priority-${task.priority}`}>{task.priority}</span>
-                    <span className="date">{new Date(task.dueDate).toLocaleDateString()}</span>
+                    <span className={`priority priority-${task.priority}`}>
+                      {priorityIcons[task.priority]}
+                      <span>{task.priority}</span>
+                    </span>
+                    <span className="date">
+                      <Calendar size={12} />
+                      <span>{new Date(task.dueDate).toLocaleDateString()}</span>
+                    </span>
                     <div className="task-card-actions">
                       {canChangeStatus && (
                         <button
