@@ -440,7 +440,7 @@ function Workspace({ user, theme, onToggleTheme, onLogout }) {
               <h1>{selectedProject?.name || "Create a project to begin"}</h1>
               {selectedProject && (
                 <span className={`project-status-tag ${isProjectCompleted ? "completed" : "active"}`}>
-                  {isProjectCompleted ? <CheckCircle2 size={13} /> : <Clock size={13} />}
+                  {isProjectCompleted ? <CheckCircle2 size={13} strokeWidth={2.5} /> : <span className="status-dot-pulse" />}
                   <span>{isProjectCompleted ? "Completed" : "Ongoing"}</span>
                 </span>
               )}
@@ -487,7 +487,7 @@ function Workspace({ user, theme, onToggleTheme, onLogout }) {
                     <h2>Tasks</h2>
                     <p>{tasks.length} task{tasks.length === 1 ? "" : "s"} in this project</p>
                   </div>
-                  <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                  <div className="panel-actions">
                     <ExcelImportButton project={selectedProject} onSaved={refresh} />
                     <TaskForm project={selectedProject} onSaved={refresh} />
                   </div>
@@ -1547,7 +1547,10 @@ function TaskForm({ project, onSaved }) {
 
   return (
     <>
-      <button className="primary" onClick={() => setOpen(true)}><Plus size={16} />Task</button>
+      <button className="primary add-task-btn" type="button" onClick={() => setOpen(true)}>
+        <Plus size={16} />
+        <span>Task</span>
+      </button>
       {open && createPortal(
         <div className="modal-backdrop">
           <form className="task-form modal-form" onSubmit={submit}>

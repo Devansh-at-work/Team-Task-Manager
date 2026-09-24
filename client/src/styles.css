@@ -2276,28 +2276,69 @@ h4 {
 .title-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .project-status-tag {
-  padding: 2px 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px;
   border-radius: 999px;
   font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .project-status-tag.active {
   background: color-mix(in srgb, var(--accent-soft) 40%, transparent);
   color: var(--accent);
-  border: 1px solid var(--line);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
 }
 
 .project-status-tag.completed {
-  background: color-mix(in srgb, var(--good) 20%, transparent);
+  background: color-mix(in srgb, var(--good) 18%, transparent);
   color: var(--good);
   border: 1px solid color-mix(in srgb, var(--good) 40%, transparent);
+}
+
+.status-dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.status-dot-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.5;
+  animation: statusPulse 2s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+}
+
+@keyframes statusPulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(2);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
 }
 
 .topbar-actions {
@@ -3223,4 +3264,40 @@ textarea {
   border-top: 1px solid var(--line);
   padding-top: 16px;
   margin-top: 20px;
+}
+
+/* Unified Panel Action Buttons (Import Excel & + Task) */
+.panel-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.excel-import-btn,
+.add-task-btn {
+  height: 38px !important;
+  min-height: 38px !important;
+  padding: 0 16px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  border-radius: 50px !important;
+  font-size: 0.86rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.excel-import-btn svg,
+.add-task-btn svg {
+  flex-shrink: 0;
+  display: block;
+}
+
+.excel-import-btn span,
+.add-task-btn span {
+  display: inline-block;
+  line-height: 1;
 }
