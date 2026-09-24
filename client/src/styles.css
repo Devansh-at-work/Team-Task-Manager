@@ -1009,7 +1009,6 @@ textarea {
   color: var(--text-soft);
 }
 
-.logout,
 .icon-button {
   width: 40px;
   height: 40px;
@@ -1017,8 +1016,43 @@ textarea {
   place-items: center;
   color: var(--text);
   background: var(--surface-strong);
-  border-color: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 10px;
   box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: all 180ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.icon-button:hover {
+  border-color: var(--line-strong);
+  background: var(--surface-muted);
+  transform: translateY(-1px);
+}
+
+.logout {
+  width: auto !important;
+  height: 40px;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-soft);
+  background: var(--surface-strong);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 180ms cubic-bezier(.2, .8, .2, 1);
+}
+
+.logout:hover {
+  border-color: color-mix(in srgb, var(--bad) 35%, transparent);
+  background: color-mix(in srgb, var(--bad) 10%, var(--surface-strong));
+  color: var(--bad);
+  transform: translateY(-1px);
 }
 
 .mini-form {
